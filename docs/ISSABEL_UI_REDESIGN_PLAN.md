@@ -83,3 +83,56 @@ Acceptance:
 ## 10. Current blocker
 
 This repository is currently a project specification/scaffold, not the FS PBX application source. Connect or import the actual FS PBX source before attempting source-code audit or implementation. Do not generate a replacement PBX from scratch or fabricate integrations.
+
+## 9. End-to-end Issabel-style PBX setup workflow (required)
+
+The goal is not merely similar colors or a sidebar. The complete operator workflow must feel familiar to someone who already uses Issabel: add external telephony connectivity, create extensions, connect endpoints, define inbound/outbound call handling, then assemble IVR/queues and verify calls. Use the actual capabilities discovered in the existing FS PBX source; do not invent fields or pretend an unsupported backend action works.
+
+### Guided setup order
+
+1. **Numbering and provider connectivity**
+   - Add/edit a SIP trunk or gateway with a clear provider name, host/domain, port, transport, authentication mode, username/auth ID, secret, registration mode, caller-ID defaults, codecs and other fields only where supported by the current backend.
+   - Where the provider supplies public DID/phone numbers, manage them as numbers/DIDs associated with the relevant tenant and provider. Clearly distinguish a DID/phone number from a SIP gateway/trunk; do not treat them as the same object.
+   - Validate required fields, show a masked credential summary, provide safe test/status actions if supported, and show registration/reachability state with last-check time and useful error details.
+   - Never expose secrets after save, log secrets, or apply unreviewed live routing changes automatically.
+
+2. **Create extensions**
+   - Offer a familiar Extensions list and “Add Extension” flow with extension number, display/name, tenant/domain, endpoint/device association and voicemail options where supported.
+   - Generate or configure SIP credentials using existing FS PBX logic. Show the secret only when safely generated/displayed initially; never reveal it again from stored configuration.
+   - Detect duplicate extension numbers within the correct tenant scope and explain validation errors inline.
+   - Provide a safe way to copy/download endpoint configuration only if implemented; do not invent provisioning functionality.
+
+3. **Connect numbers to call handling**
+   - Inbound: DID/number → inbound route → destination (extension, ring group, queue, IVR or other supported destination).
+   - Outbound: extension/tenant → outbound route/pattern → prioritized gateway/trunk → caller-ID policy and permissions.
+   - Explain route priority and matching patterns in plain language; provide a summary before applying changes.
+   - Validate destination existence and tenant ownership before saving. A number must not silently route into another tenant.
+
+4. **Build call flows**
+   - Use familiar forms and destination selectors for ring groups, queues, IVR/virtual receptionist, time conditions, voicemail, call forwarding and recordings, where present in the source.
+   - Make the workflow discoverable through PBX and Applications menus, with breadcrumbs, clear save/cancel actions and status feedback.
+   - A guided wizard may help new users, but every setting must remain available in the normal advanced screens.
+
+5. **Verify and troubleshoot**
+   - Provide a setup checklist: gateway status, extension/device status where available, inbound route match, outbound route match, test-call result where safely supported, and recent CDR/log references.
+   - Distinguish configuration saved from service reloaded and from a real successful call. Never show “test successful” without evidence.
+   - Use safe validation and preview/dry-run capabilities if the backend supports them; require explicit confirmation for disruptive reloads or live routing changes.
+
+### Issabel-style information architecture
+
+Use a stable left navigation with familiar PBX groupings, then map every real feature from the source:
+- **PBX:** Extensions, Devices, SIP Trunks/Gateways, Numbers/DIDs, Inbound Routes, Outbound Routes, Ring Groups, Queues, IVR, Time Conditions, Voicemail, Call Forwarding, Recordings, CDR/Call History.
+- **Applications:** Virtual Receptionist/IVR and other application modules actually supported.
+- **Contact Center / Campaigns / Messaging:** only real modules found in the codebase.
+- **Reports:** CDR, usage, recordings and operational reports actually implemented.
+- **Reseller & Billing:** tenant/reseller plans, rates, usage and payments only where existing modules/APIs support them.
+- **System:** users/roles, domains/tenants, provisioning, firewall and platform settings actually supported.
+
+Menu labels may be refined after the source audit. Do not create dead links or placeholder pages.
+
+### Acceptance criteria
+- A first-time tenant admin can follow the visible sequence to add a gateway, create an extension, attach a device, assign an inbound DID destination and configure an outbound route without guessing which screen comes next.
+- Existing features remain reachable in Advanced Mode; Easy Mode must not remove or irreversibly hide them.
+- All writes use existing authorization, tenant scoping, backend validation and APIs wherever possible.
+- Existing database schemas and API contracts remain backward-compatible unless a separately reviewed migration is essential.
+- Automated tests cover gateway validation, duplicate extensions, tenant isolation, route destination validation, and regressions in existing call handling.
