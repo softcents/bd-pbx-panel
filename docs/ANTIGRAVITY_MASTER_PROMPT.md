@@ -273,3 +273,32 @@ Provide a first-class outbound calling workspace inside the Agent Portal. Agents
 - Tenant isolation and role permissions apply to contacts, calls, recordings, campaigns, CDRs and reports.
 - Test authorized/unauthorized destinations, caller-ID policy, concurrent call limits, no-credit/credit-limit behavior, duplicate originate prevention, call-state transitions, failed calls, delayed/duplicate CDRs, correct billing, hangup, session expiry and cross-tenant access denial.
 - Do not claim the dialer is live until a real call path is tested end-to-end on a safe test route. Keep existing PBX configuration and customer-facing APIs backward-compatible.
+
+
+## CRM caller-name lookup and incoming-call screen pop (mandatory)
+
+Implement caller identification from the tenant's own CRM/contact list. When an inbound call reaches FS PBX, look up the caller's normalized phone number against the current tenant's synced/connected CRM contacts and PBX contact list. If a match exists, show the saved contact name (for example, the contact's saved name/title such as Chairman), company/organization, matching number, and permitted CRM context in the ringing Agent Portal. If there is no match, show the received caller ID number and an explicit “Unknown contact” state; never invent a name.
+
+### Contact sources and integration
+- Support native PBX contacts plus supported CRM connections through documented API/webhook/sync mechanisms. Audit existing CRM/API integration before choosing implementation. Do not assume a specific CRM is present.
+- Support manual contact import and safe CSV import/export if supported by the app, duplicate detection, sync status, last-synced timestamp and visible sync errors.
+- Normalize phone numbers consistently (E.164 where possible) while preserving the original display number. Handle country code, leading zero, spaces, punctuation and duplicate contacts deterministically.
+- Define match priority and conflict handling: exact normalized number first; if multiple matches exist, show a safe contact chooser or configured primary contact rather than guessing. Do not trust SIP-provided caller-name text as authoritative when a verified tenant contact match is available.
+- Keep all contact records, CRM credentials and lookups tenant-scoped. Never search another tenant's CRM/contact database. Store CRM secrets server-side and use least-privilege credentials.
+
+### Incoming-call experience
+- On ringing, use the actual call UUID/session and caller number to request a fast, authorized contact lookup. Show a screen-pop card with contact name, company, number, contact tags and other fields the agent is allowed to see.
+- Include a link/action to open the full CRM record when a valid connected CRM URL/API is available. Optionally show recent interactions, open tickets/deals and notes only if supported and authorized.
+- Update the pop-up as call state changes; dismiss/complete it appropriately after the call ends. Avoid duplicate pop-ups from multiple event deliveries.
+- For unknown callers, provide a permitted “Create contact/lead” action only if CRM create API/permissions exist; do not create records automatically without an authorized action.
+- For transfers/ring groups/queues, show the same matched contact context to each authorized receiving agent, without leaking data across tenants.
+
+### Outbound and other call surfaces
+- From Agent Portal outbound dialer and click-to-call, look up the destination in the same tenant's contacts and show the saved name before/during call. Correlate call outcome, disposition and follow-up with the correct CRM contact only where supported.
+- Ensure caller ID, contact name shown in UI, and outbound caller ID are distinct concepts. Never change network caller ID merely because a contact matched.
+
+### Performance, security and tests
+- Keep lookup fast using indexed normalized-number fields and/or a safe cache with defined freshness/invalidation; do not block FreeSWITCH call setup on a slow third-party CRM. Use bounded timeouts and gracefully fall back to number-only display.
+- Enforce RBAC for CRM fields, notes, recordings and history. Log lookup/sync errors without leaking access tokens or sensitive contact data.
+- Test exact matches, number normalization, country-code variants, duplicate numbers, unknown caller, stale sync, CRM API timeout, webhook duplication, transfers, concurrent calls, outbound click-to-call, contact update/deletion, and cross-tenant isolation.
+- Acceptance: add a contact named “Chairman” (or any saved contact name) with a phone number in a tenant CRM/contact list; an inbound call from that number must show that saved name to authorized agents. A number absent from the contact source must remain unknown. Do not claim implementation complete until verified end-to-end.
