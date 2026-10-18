@@ -1,4 +1,4 @@
-# Implementation Roadmap
+# Custom SoftCents UX — Implementation Roadmap
 
 ## Phase 0 — Source access and baseline
 
@@ -13,33 +13,33 @@
 
 **Deliverable:** Audit report, baseline results, feature matrix, risk register.
 
-## Phase 1 — UX architecture
+## Phase 1 — Custom UX architecture
 
-- Create Issabel-inspired navigation based on audited features.
-- Map every current feature to a destination.
-- Design role-specific navigation and dashboards.
+- Design a task-oriented SoftCents experience rather than copying another PBX interface.
+- Map every current feature to a clear destination.
+- Design role-specific workspaces and navigation.
 - Define Easy Mode vs Advanced Mode behavior.
-- Define white operational UI tokens and reusable layout patterns.
-- Review with the project owner before broad implementation.
+- Define white operational UI tokens and reusable components.
+- Review the UX plan before broad implementation.
 
 **Gate:** No feature is orphaned; roles and permissions are mapped.
 
-## Phase 2 — Design-system and shell
+## Phase 2 — Shared application shell
 
-- Implement shared page shell, navigation, breadcrumbs, page title, alerts, forms, tables, pagination, filters, status badges, loading/empty/error states.
+- Implement shared page shell, task-oriented navigation, global search where supported, breadcrumbs, page titles, alerts, forms, tables, pagination, filters, status indicators, and loading/empty/error states.
 - Keep existing route names and business logic intact.
 - Make navigation responsive and keyboard accessible.
 - Use real data and existing services; do not substitute hard-coded demo metrics.
 
-**Gate:** Existing pages still load and existing authorization remains effective.
+**Gate:** Existing pages still load and authorization remains effective.
 
 ## Phase 3 — Migrate existing screens incrementally
 
-- Group screens into PBX, Contact Center, Campaigns, Messaging, Reports, Reseller & Billing, System.
+- Organize existing screens into Phone System, Contact Center, Campaigns, Messaging, Analytics, Customers & Billing, and Administration, adapting after audit.
 - Migrate one coherent module at a time.
 - Preserve API contracts and validation behavior.
 - Verify each module's critical workflows before moving to the next.
-- Keep a temporary compatibility route/redirect if necessary and safe.
+- Keep a compatibility route/redirect if necessary and safe.
 
 **Gate:** Per-module regression checklist passes.
 
@@ -50,7 +50,7 @@ Only implement features supported by actual code and telephony APIs:
 - Supervisor wallboard and authorized monitoring.
 - Campaign workflows and import validation.
 - Safe retries, DNC, concurrency, and abandonment controls.
-- Recording/QA, CRM context, messaging integrations and reports where data/API support exists.
+- Recording/QA, CRM context, messaging integrations, and reports where data/API support exists.
 
 **Gate:** No fake actions; each feature has a verified integration and tests.
 
@@ -59,18 +59,18 @@ Only implement features supported by actual code and telephony APIs:
 - Audit existing gateway and routing configuration.
 - Add health checks and observability before automated switching.
 - Configure failure threshold 1 and stable recovery confirmation of 60 seconds as requested.
-- Include prioritized retries, safe failback, per-tenant controls, audit events and operational status.
+- Include prioritized retries, safe failback, per-tenant controls, audit events, and operational status.
 - Test using a staging FreeSWITCH environment before production rollout.
 
 **Gate:** Failure/recovery/failback tests pass; production behavior is not silently changed.
 
-## Phase 6 — Security, accessibility and performance
+## Phase 6 — Security, accessibility, and performance
 
 - Verify authorization at backend boundaries.
 - Test cross-tenant access denial.
-- Check secrets handling, webhook verification, input validation, CSRF/XSS protections and audit redaction.
-- Test keyboard navigation, focus, contrast, mobile layout and large tables.
-- Review query performance, pagination, caching and real-time update load.
+- Check secrets handling, webhook verification, input validation, CSRF/XSS protections, and audit redaction.
+- Test keyboard navigation, focus, contrast, mobile layout, and large tables.
+- Review query performance, pagination, caching, and real-time update load.
 
 **Gate:** Security and performance issues are documented and blocking defects resolved.
 
@@ -78,8 +78,8 @@ Only implement features supported by actual code and telephony APIs:
 
 - Run full automated tests and manual telephony regression suite.
 - Verify migrations and backup/rollback steps.
-- Prepare staging deployment, smoke tests, monitoring and rollback plan.
-- Produce a change log, test report, known limitations and operator notes.
+- Prepare staging deployment, smoke tests, monitoring, and rollback plan.
+- Produce a change log, test report, known limitations, and operator notes.
 - Deploy only with explicit approval.
 
 ## Required status reporting
