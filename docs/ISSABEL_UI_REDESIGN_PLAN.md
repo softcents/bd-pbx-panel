@@ -203,3 +203,13 @@ FS PBX must include a dedicated business/finance workspace alongside PBX adminis
 
 ### Permissions and tests
 Enforce server-side access for Super Admin, Finance, Reseller and Customer Admin with tenant boundaries applied to screens, API endpoints and exports. Test reconciliation, duplicate payment callbacks, partial payment/refund, wallet accounting, P&L fixtures, rounding, provider cost variance and cross-tenant access. Financial reports must clearly state filters and generation time.
+
+
+## 13. Billing mode configuration: Prepaid, Postpaid and Hybrid
+
+The Billing UI must expose three supported modes and explain them in plain language:
+- **Prepaid:** fund wallet before usage; rate eligible usage and debit once; show balance, ledger, low-balance alerts, top-up history and insufficient-funds policy.
+- **Postpaid:** accumulate rated usage in a billing period; issue itemized invoices with due date, credit limit, payments, credits, overdue state and service policy.
+- **Hybrid:** recurring fixed fees (extension subscription, DID rental or enabled add-ons) follow their billing schedule, while eligible variable usage can be charged to wallet or postpaid invoice independently. Clearly show the charge destination for each service.
+
+For each customer/tenant, expose the mode, effective date, applicable tariff, currency, billing cycle, credit limit, low-balance threshold and any authorized service restriction policy. Show a preview before saving, and audit changes. Prevent duplicate charges and double-counting between wallet movements, invoices and revenue. Test all three modes with retries, refunds, partial payments, rate changes and tenant-isolation checks. Do not claim unsupported behavior is implemented.
