@@ -58,3 +58,7 @@ Target appropriate landing pages for Super Admin, Company Admin, Reseller, Custo
 - Easy Mode and Advanced Mode both retain the complete capability set.
 - No mock metric or fake button is presented as production functionality.
 - Changed workflows pass relevant regression tests.
+
+## Usability benchmark: 3CX-simple, enterprise-capable
+
+Design for quick comprehension: white uncluttered interface, clear primary actions, consistent object pages, search/filterable lists, inline validation, plain-language labels and task checklists. Make gateway, DID, extension, routing and IVR/queue setup easy for a new admin. Advanced Mode must retain every supported option. Show the difference between saved, applied, registered and call-tested states. Require confirmation and audit for disruptive changes. The goal is ease comparable to 3CX with a broader modular capability set, not a visual or code clone. Keep FreeSWITCH and current app behavior intact.
