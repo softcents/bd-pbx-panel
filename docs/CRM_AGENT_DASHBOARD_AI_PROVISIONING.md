@@ -271,3 +271,52 @@ Support configured Prepaid, Postpaid and Hybrid modes without leaking unrelated 
 9. Run tests and provide exact changed files, passed/failed checks, known limitations and rollback notes.
 
 Do not attempt to deliver the entire platform by generating a mock dashboard. Prioritize working end-to-end vertical slices, preserving existing functionality and reporting truthfully what is and is not implemented.
+
+
+## 15. Multiple Users and Multiple Extensions
+
+Support both **one user assigned multiple extensions** and, only when explicitly configured and supported, **multiple users sharing one extension**. These are different assignment modes and must not be conflated.
+
+### Assignment model
+- A customer/tenant can have many users and many extensions.
+- A user may be assigned one or more extensions, with a configurable primary/default extension.
+- An extension may be assigned to one user by default.
+- Shared extension mode may allow multiple authorized users/devices to use a shared line where the FreeSWITCH/SIP configuration supports it. Make shared-line behavior explicit; do not duplicate or expose SIP credentials casually.
+- Support department/team membership and optional ring-group/queue membership independently from extension ownership.
+- Model assignments with tenant scope, effective dates/status, assigned-by actor and audit history. Avoid schema assumptions until the existing database is audited.
+
+### Customer and admin workflow
+- In Customer Setup Wizard, ask how many users and extensions are needed.
+- Ask whether extensions should be personal, shared, or a combination.
+- Collect extension range/prefix and primary extension preference.
+- Offer a reviewable mapping table: User, Department, Extension(s), Primary Extension, Device/Softphone, Call Permissions and Recording Permissions.
+- Validate extension-number conflicts and package quotas before creation.
+- Allow bulk creation/import only through validated templates and duplicate checks.
+- Let authorized admins assign/unassign extensions, change a primary extension and view assignment history.
+- A customer may manage only users/extensions within their own tenant and delegated package limits.
+
+### Agent web dialer
+- Display the active extension selector for users assigned multiple extensions.
+- Before dialing, verify that the selected extension belongs to the authenticated user or is explicitly delegated to them.
+- Use the selected extension for outbound calls only if supported by the actual FreeSWITCH integration and outbound policy.
+- Clearly show which extension receives an incoming call and which extension is active for outbound dialing.
+- Handle multiple registered devices and shared-line ringing/answering only where supported; otherwise document the limitation.
+- Never expose SIP passwords or allow extension selection to bypass caller-ID, route, credit, destination or role restrictions.
+
+### Billing and reporting
+- Support configurable per-extension charges, included-extension allowances and package-based billing, according to the assigned tariff.
+- Avoid double charging a shared extension merely because multiple users are assigned to it; bill by the configured billing unit and tariff rule.
+- Report usage and call records with tenant, extension and user attribution only when reliable event/CDR data exists.
+- Preserve assignment history so old calls remain attributable to the assignment effective at call time.
+- Restrict call recordings and reports by tenant and permissions, regardless of extension sharing.
+
+### Acceptance tests
+- One user with multiple extensions and a default extension
+- One user switching between permitted extensions in the dialer
+- Multiple users sharing one extension when explicitly enabled
+- Unauthorized cross-tenant or unassigned extension selection is rejected by the backend
+- Extension collision and quota limit handling
+- Assignment change does not rewrite historical call attribution
+- Correct per-extension/package billing with no duplicate shared-line charges
+- Incoming call screen pop and selected-extension display
+- Audit logs for create, assign, unassign, share and default-extension changes
