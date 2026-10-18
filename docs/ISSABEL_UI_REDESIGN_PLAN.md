@@ -136,3 +136,31 @@ Menu labels may be refined after the source audit. Do not create dead links or p
 - All writes use existing authorization, tenant scoping, backend validation and APIs wherever possible.
 - Existing database schemas and API contracts remain backward-compatible unless a separately reviewed migration is essential.
 - Automated tests cover gateway validation, duplicate extensions, tenant isolation, route destination validation, and regressions in existing call handling.
+
+
+## 10. Product UX direction: 3CX-level simplicity, beyond-3CX capability
+
+Treat 3CX as a usability benchmark and Issabel as a familiar PBX configuration/navigation reference. The product goal is not a visual clone: deliver a coherent, easy-to-learn interface over the existing FreeSWITCH platform, with a broader advanced feature set where the real backend can support it.
+
+### Two layers, one complete product
+- **Quick Setup / Easy Mode:** task-oriented guided flows, plain-language descriptions, sensible validated defaults, progress checklist, contextual help, global search and a clear next step.
+- **Advanced Mode:** exposes every supported setting, detailed routing/permissions, diagnostics, operational controls and expert configuration.
+- Both modes must use the same underlying configuration and permissions. Easy Mode must never delete, reset, or permanently hide features. Users can switch modes without losing work.
+
+### Primary tasks must be exceptionally easy
+1. Add a SIP gateway/trunk and confirm registration/health.
+2. Add a phone number/DID and map it to a tenant and provider.
+3. Create an extension, securely configure SIP credentials, and associate a device.
+4. Configure inbound number routing and outbound dialing rules.
+5. Create an IVR, ring group or queue using familiar destination selectors.
+6. Test/verify configuration with honest status and diagnostics.
+7. Manage users, permissions, working hours, voicemail, recordings and call history.
+8. For authorized roles, operate queues/campaigns, supervise calls, review reports and manage reseller billing.
+
+Use guided task cards and a setup checklist, but do not make a wizard the only way to configure the system. Keep lists, search, filters, bulk actions (only where safe), inline validation, clear save/cancel, breadcrumbs, and actionable error messages consistent.
+
+### Advanced capabilities strategy
+Aim to exceed a typical small-business PBX in breadth through modular, permission-controlled capabilities: multi-tenant/reseller hierarchy; granular role and feature permissions; contact center with supervisor listen/whisper/barge where technically supported; progressive and IVR campaigns where implemented; multi-provider gateway routing and safe automatic failover; usage/tariff/wallet billing; audit trail; API/webhooks; monitoring; data exports; and integrations. These are target capabilities, not permission to display fake modules. Audit what exists, classify each item as implemented/partial/missing, and build in tested phases.
+
+### Non-negotiable compatibility
+FreeSWITCH remains the call engine. Preserve current APIs, database behavior, authentication, tenant boundaries, dialplan and live call safety. Do not copy 3CX/Issabel branding or proprietary source. Do not convert Asterisk-specific commands or configuration into the FreeSWITCH implementation. Changes affecting live routing must be previewed, confirmed, audited and recoverable.
