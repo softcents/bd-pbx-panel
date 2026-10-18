@@ -169,3 +169,37 @@ FreeSWITCH remains the call engine. Preserve current APIs, database behavior, au
 ## 11. Usability benchmark: 3CX-simple, advanced beyond a basic PBX
 
 Use 3CX as the ease-of-use benchmark and Issabel as the familiar PBX workflow reference. Create an original FS PBX UI. Prioritize Quick Setup for Gateway/Trunk → Number/DID → Extension/Device → Inbound/Outbound Routes → IVR/Queue → Verification. Use plain language, validated defaults, a visible checklist, contextual help, global search, breadcrumbs and actionable errors. Keep all advanced options in Advanced Mode and ensure switching modes preserves data and permissions. Advanced breadth should include multi-tenant/reseller operations, granular permissions, contact center, campaigns, gateway failover, billing, audit, APIs and monitoring only as each capability is confirmed in source and fully implemented. No fake pages or controls. FreeSWITCH remains the engine; preserve APIs, DB, auth, tenant isolation and live routing safety. Never copy proprietary code/branding or introduce Asterisk-only behavior.
+
+
+## 12. Business panel: advanced billing, finance and profit/loss
+
+FS PBX must include a dedicated business/finance workspace alongside PBX administration. Keep the visual language clean, white, easy to scan and fast for daily operations. The UI should be approachable like 3CX while exposing detailed financial controls to authorized roles.
+
+### Dashboard layout
+- KPI cards: revenue, collected, receivables/overdue, provider cost, operating expenses, gross profit, net profit/loss and margin.
+- Trend charts: revenue vs cost, profit by period, service mix and collection trend.
+- Recent activity: payments, invoices, refunds, rate changes, provider-cost imports and expense entries.
+- Filters: date range, tenant, reseller, customer, provider and service; all values must be sourced from real records.
+- Click-through from every KPI/report row to the supporting invoice, payment, usage record, CDR or expense entry.
+
+### Advanced billing modules
+1. Tariff/rate-plan management with tenant/reseller/customer scope, effective dates and audit history.
+2. CDR usage rating, customer charge calculation and provider cost comparison.
+3. Invoice, invoice items, due dates, partial payments, receipts, credit notes, refunds and overdue aging.
+4. Prepaid wallet and postpaid credit/limit policies, alerts, controlled adjustments and full ledger history.
+5. Reseller sales/collections, assigned customer pricing, commission/discount handling and receivable/payable views.
+6. Provider usage and invoice reconciliation; distinguish estimated from confirmed cost.
+7. Expense management for hosting, carriers, numbers, payment fees and other operating costs.
+8. Payment gateway transaction reconciliation and safe webhook handling; integrate only configured, supported gateways.
+9. Role-controlled exports and audit history.
+
+### Profit & Loss rules
+- Show revenue, direct service costs, gross profit, operating expenses, net profit/loss and margin for a selected period.
+- Separate invoiced revenue from cash received and separate provider usage estimates from reconciled provider invoices.
+- Do not double-count wallet top-ups as earned revenue; show wallet movements separately and apply a documented accounting policy.
+- Posted transactions must not be silently edited/deleted; use audited reversals, credit notes or adjustments.
+- Use decimal-safe currency calculations, explicit rounding and currency-aware records. Show provisional/estimated status when costs or invoices are incomplete.
+- Every number must drill down to its underlying records; no sample or hardcoded figures in production.
+
+### Permissions and tests
+Enforce server-side access for Super Admin, Finance, Reseller and Customer Admin with tenant boundaries applied to screens, API endpoints and exports. Test reconciliation, duplicate payment callbacks, partial payment/refund, wallet accounting, P&L fixtures, rounding, provider cost variance and cross-tenant access. Financial reports must clearly state filters and generation time.
