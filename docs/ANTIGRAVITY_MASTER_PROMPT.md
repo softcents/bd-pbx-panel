@@ -302,3 +302,7 @@ Implement caller identification from the tenant's own CRM/contact list. When an 
 - Enforce RBAC for CRM fields, notes, recordings and history. Log lookup/sync errors without leaking access tokens or sensitive contact data.
 - Test exact matches, number normalization, country-code variants, duplicate numbers, unknown caller, stale sync, CRM API timeout, webhook duplication, transfers, concurrent calls, outbound click-to-call, contact update/deletion, and cross-tenant isolation.
 - Acceptance: add a contact named “Chairman” (or any saved contact name) with a phone number in a tenant CRM/contact list; an inbound call from that number must show that saved name to authorized agents. A number absent from the contact source must remain unknown. Do not claim implementation complete until verified end-to-end.
+
+
+### Explicit unknown-caller display rule
+If the caller's number does not match any authorized contact in the tenant's CRM/PBX contact list, the displayed contact-name field must show exactly **“Unknown”**. Do not invent a name, infer one, or substitute a guessed business/title. The caller's raw phone number may be displayed separately as the caller number, but the name field remains “Unknown” until a verified contact match is found. If lookup fails because the CRM is temporarily unavailable, show “Unknown” with a separate optional “Contact lookup unavailable” status; never imply a verified match.
