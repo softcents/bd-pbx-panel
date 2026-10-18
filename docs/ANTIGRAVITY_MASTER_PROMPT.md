@@ -84,3 +84,21 @@ Do not stop at an Issabel-like theme/sidebar. Recreate the familiar operational 
 Use Issabel as a UX/workflow reference only. Keep FreeSWITCH as the call engine and preserve the current app's backend, APIs, DB, auth, roles, tenant isolation, dialplan, CDRs, recordings, jobs and integrations. Audit the real source before implementing. Use only existing working capabilities; no fake controls, dead pages or invented API fields. Separate DID/phone-number records from SIP gateway/trunk records. Show confirmation and safe previews before disruptive live changes. Easy Mode can guide users through the same sequence but must not remove any Advanced Mode functionality.
 
 Acceptance test: a tenant administrator should be able to add a gateway, add/associate a DID, create an extension, assign inbound routing, configure outbound routing and verify the setup using a discoverable Issabel-like workflow, without crossing tenant boundaries.
+
+
+## Product target: 3CX-level simplicity with enterprise-grade breadth
+
+Use 3CX as the usability benchmark and Issabel as a reference for familiar PBX administration flows. Build an original FS PBX experience, not a clone. FreeSWITCH remains the telephony engine.
+
+### Two modes, one complete product
+- Quick Setup / Easy Mode: guided workflows, plain-language labels, validated defaults, contextual help, progress checklist, global search and a clear next step.
+- Advanced Mode: every supported configuration option, detailed routing, granular permissions, diagnostics and operational controls.
+- Both modes share the same records and permissions. Switching modes must not lose work. Easy Mode may simplify presentation but must never delete or permanently hide features.
+
+### Make the common workflow effortless
+Gateway/trunk → phone number/DID → extension and device → inbound route → outbound route → IVR/ring group/queue → verify status and call results. Explain unfamiliar terms, validate inputs, show a clear next step and provide useful recovery guidance. A wizard must not be the only way to configure anything.
+
+### Advanced capability ambition
+Where supported by the source and implemented with tests, target multi-tenant/reseller hierarchy, granular role/feature permissions, advanced contact center and supervisor tools, progressive/IVR campaigns, gateway health checks and safe prioritized failover/failback, billing/tariffs/wallets, audit logs, APIs/webhooks, monitoring and integrations. Audit the code first and classify each feature as implemented, partial or missing. Never present a target as a working feature before the backend, permissions, UI and tests are complete.
+
+Preserve current APIs, database behavior, authentication, tenant isolation, dialplan, CDR, recordings, background jobs and integrations. Do not copy proprietary code or branding, and do not introduce Asterisk-only behavior. Preview, confirm, audit and provide a recovery path for disruptive live-routing changes.
