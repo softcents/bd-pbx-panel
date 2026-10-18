@@ -11,6 +11,16 @@ Issabel-inspired UI/UX redesign for the existing FS PBX / FreeSWITCH platform. T
 - Provide role-specific workspaces and Easy/Advanced Mode without removing advanced capabilities.
 - Implement advanced contact-center features only when supported by the actual code and integrations.
 
+## Product specifications
+
+- [Issabel-inspired UI redesign](docs/ISSABEL_UI_REDESIGN_PLAN.md)
+- [Design system](docs/CUSTOM_DESIGN_SYSTEM.md)
+- [Custom UX plan](docs/CUSTOM_UX_PLAN.md)
+- [Feature matrix](docs/FEATURE_MATRIX.md)
+- [Implementation roadmap](docs/IMPLEMENTATION_ROADMAP.md)
+- [Antigravity master prompt](docs/ANTIGRAVITY_MASTER_PROMPT.md)
+- [CRM Sales Agent Dashboard, Web Dialer, AI Model Hub and Customer Provisioning specification](docs/CRM_AGENT_DASHBOARD_AI_PROVISIONING.md)
+
 ## Non-negotiable rule
 
 **Redesign and simplify the interface without removing existing capabilities or breaking working behavior.** The existing FS PBX application remains the source of truth for backend logic, FreeSWITCH integration, database schema, routes, APIs, permissions, and telephony behavior.
@@ -25,7 +35,7 @@ Issabel-inspired UI/UX redesign for the existing FS PBX / FreeSWITCH platform. T
 
 ## Current status
 
-This repository currently contains project specifications and implementation instructions, not the complete FS PBX application source. No production UI or telephony code has been imported or changed yet.
+This repository contains project specifications and implementation instructions, not the complete FS PBX application source. No production UI or telephony code has been imported or changed yet.
 
 ## Source references
 
