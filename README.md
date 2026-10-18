@@ -1,34 +1,40 @@
 # SoftCents BD PBX Panel
 
-Issabel-inspired UI/UX redesign project for the existing FS PBX / FreeSWITCH platform.
+A custom, task-focused operations interface for the existing FS PBX / FreeSWITCH platform. The goal is to make everyday PBX and advanced contact-center work easier without forcing users through a complicated legacy-style administration UI.
+
+## Product direction
+
+Build a purpose-designed SoftCents experience—not a clone of another PBX interface. Use a clean white workspace, clear task-based navigation, smart defaults, useful search, focused forms, and role-specific workspaces.
 
 ## Non-negotiable rule
 
-**Redesign and simplify the interface without removing existing features or breaking working behavior.** The existing FS PBX application remains the source of truth for backend logic, FreeSWITCH integration, database schema, routes, APIs, permissions, and telephony behavior.
+**Improve usability without removing existing capabilities or breaking working behavior.** The existing FS PBX application remains the source of truth for backend logic, FreeSWITCH integration, database schema, routes, APIs, permissions, and telephony behavior.
 
-## Goals
+## Core experience
 
-- Organize navigation and settings using Issabel PBX as an information-architecture reference, without copying its branding or forcing Asterisk-only behavior into FreeSWITCH.
-- Keep a clean white operational UI, compact tables, readable forms, responsive side navigation, and consistent status indicators.
-- Provide Easy Mode and Advanced Mode. Easy Mode may simplify presentation but must not remove advanced capabilities.
-- Build role-specific views for Super Admin, Company Admin, Reseller, Customer Admin, Supervisor, Agent, Finance/Billing, and NOC/Operations.
-- Support a full advanced contact-center experience only where the underlying platform and integrations genuinely support the capability.
-- Document feature parity and verify regressions before release.
+- Simple, white, responsive operational UI.
+- Task-based navigation and global search/quick actions.
+- Easy Mode for common tasks and Advanced Mode for detailed controls.
+- Role-specific workspaces for Super Admin, Company Admin, Reseller, Customer Admin, Supervisor, Agent, Finance/Billing, and NOC/Operations.
+- Advanced contact-center workflows only when real platform capabilities and integrations support them.
+- Clear health, status, validation, empty, loading, error, and audit states.
+- Full feature inventory and regression testing before release.
 
 ## Required workflow
 
-1. Import or connect the existing FS PBX source code and inspect its actual framework, routes, APIs, permissions, database, and FreeSWITCH integration.
-2. Produce a feature inventory and old-feature-to-new-navigation mapping before changing application code.
-3. Propose the UI architecture and implementation plan.
-4. Implement in small, reviewable changes; preserve existing routes and contracts unless a migration is explicitly designed and tested.
-5. Run automated tests, build checks, and telephony regression checks. Never mark a feature complete based only on a mock screen.
+1. Connect or import the actual FS PBX source code and audit the application.
+2. Document existing features, routes, APIs, permissions, database behavior, and FreeSWITCH integrations.
+3. Design the custom UX and map every existing feature to a destination.
+4. Implement incrementally without replacing the PBX or inventing mock behavior.
+5. Run automated and telephony regression tests and report exact results.
 
 ## Current status
 
-This repository was newly created and is currently a project specification/scaffold, not the FS PBX application source. No production code has been imported or changed yet.
+This repository currently contains project specifications and implementation instructions, not the complete FS PBX application source. No production UI or telephony code has been imported or changed yet.
 
-## Design reference
+## Source reference
 
 - Existing FS PBX repository: https://github.com/nemerald-voip/fspbx
 - Existing FS PBX design guide: https://github.com/nemerald-voip/fspbx/blob/main/DESIGN.md
-- Issabel is a UX/navigation reference only; retain FreeSWITCH-compatible implementation.
+
+The reference repository is the source to audit. The new panel should use a custom SoftCents design language rather than copying another product's UI or branding.
