@@ -241,3 +241,35 @@ Treat billing as a modular telecom revenue-management subsystem, not a few walle
 - Golden fixtures for rating and P&L; invoice-to-ledger and payment-to-ledger reconciliation; prepaid debit exactly once; postpaid invoice exactly once; hybrid recurring fee plus usage without duplicate charge.
 - Duplicate/late CDRs, malformed records, rerating, partial payment, refund/reversal, wallet top-up treatment, rate versioning, timezone/day-boundary, rounding, credit limit, provider invoice variance and cross-tenant authorization tests.
 - Load tests for monthly rating/invoice runs, migration/backfill dry run, reconciliation report, feature flags and rollback plan. Never mutate live billing or routing in production without explicit reviewed migration and backup.
+
+
+## Agent Portal — built-in outbound dialer (mandatory)
+
+Provide a first-class outbound calling workspace inside the Agent Portal. Agents must be able to place authorized outbound calls without opening the Super Admin/PBX configuration panel or a separate dialer app. Audit the existing FreeSWITCH/FSPBX call-control, authentication, WebRTC/SIP and contact-center code first; reuse supported existing APIs and call flows. Do not fake call actions or bypass tenant/queue permissions.
+
+### Agent workspace UI
+- Responsive Agent Portal with a visible dial pad, number entry, call/hang-up controls, mute/hold/DTMF only where supported, call timer, clear connection state and actionable errors.
+- Quick search/select for assigned contacts/leads and click-to-call; normalize/validate destination numbers according to configured tenant dial plan.
+- Show customer/lead details and permitted CRM context during the call, plus notes, disposition/outcome codes and callback scheduling where those modules exist.
+- Call history with direction, timestamp, duration, outcome and recording link only for recordings the agent is authorized to access.
+- Agent state controls (available, busy, break, wrap-up) and queue/skill assignment view only where the existing contact-center backend supports them.
+- Keyboard accessibility, mobile/tablet responsive layout and clear states: idle, dialing, ringing, connected, on hold, completed, failed.
+
+### Call-control and routing behavior
+- Route calls through the logged-in agent's authorized extension/WebRTC endpoint and tenant's permitted outbound routes/gateways. Respect caller-ID policy, dial plan, tenant tariff, destination permissions, spending limits and fraud controls.
+- Prevent caller-ID spoofing and prevent agents from selecting arbitrary trunks or bypassing route policy. Emergency/special numbers follow configured policy and must not be blocked by generic restrictions where legally required.
+- Use server-side authorization for every originate, hangup, transfer and call-state request. Never expose FreeSWITCH credentials, gateway secrets or privileged ESL/API credentials to the browser.
+- Ensure the agent's call is correlated with the correct tenant, agent, extension, contact/lead, CDR, billing event and recording where available.
+- Show a call as connected only after a confirmed call-state event. Distinguish request accepted, ringing, answered and completed. Handle timeout, busy, rejected, unreachable and network failures with helpful messages.
+- Use secure WebRTC/SIP integration only if supported by the existing app, with authenticated sessions and correct TLS/WSS/media configuration; otherwise integrate through the existing supported agent endpoint rather than inventing browser calling support.
+
+### Billing and audit integration
+- Apply the tenant/customer/reseller's configured Prepaid, Postpaid or Hybrid usage policy to eligible calls, using the central idempotent rating/ledger pipeline. Do not debit twice when CDRs are retried or delayed.
+- Enforce balance/credit thresholds and permitted destinations before call initiation where reliable, and handle final usage reconciliation after the CDR arrives.
+- Record agent ID, tenant ID, extension, dialed destination (subject to privacy policy), route/gateway, timestamps, outcome, duration and billing correlation IDs in authorized audit/reporting systems.
+- Supervisor features (listen/whisper/barge), recording playback and transfers are shown only if actually implemented and permitted by role and jurisdiction/policy.
+
+### Safety, permissions and acceptance tests
+- Tenant isolation and role permissions apply to contacts, calls, recordings, campaigns, CDRs and reports.
+- Test authorized/unauthorized destinations, caller-ID policy, concurrent call limits, no-credit/credit-limit behavior, duplicate originate prevention, call-state transitions, failed calls, delayed/duplicate CDRs, correct billing, hangup, session expiry and cross-tenant access denial.
+- Do not claim the dialer is live until a real call path is tested end-to-end on a safe test route. Keep existing PBX configuration and customer-facing APIs backward-compatible.
