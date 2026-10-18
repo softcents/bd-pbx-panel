@@ -164,3 +164,8 @@ Aim to exceed a typical small-business PBX in breadth through modular, permissio
 
 ### Non-negotiable compatibility
 FreeSWITCH remains the call engine. Preserve current APIs, database behavior, authentication, tenant boundaries, dialplan and live call safety. Do not copy 3CX/Issabel branding or proprietary source. Do not convert Asterisk-specific commands or configuration into the FreeSWITCH implementation. Changes affecting live routing must be previewed, confirmed, audited and recoverable.
+
+
+## 11. Usability benchmark: 3CX-simple, advanced beyond a basic PBX
+
+Use 3CX as the ease-of-use benchmark and Issabel as the familiar PBX workflow reference. Create an original FS PBX UI. Prioritize Quick Setup for Gateway/Trunk → Number/DID → Extension/Device → Inbound/Outbound Routes → IVR/Queue → Verification. Use plain language, validated defaults, a visible checklist, contextual help, global search, breadcrumbs and actionable errors. Keep all advanced options in Advanced Mode and ensure switching modes preserves data and permissions. Advanced breadth should include multi-tenant/reseller operations, granular permissions, contact center, campaigns, gateway failover, billing, audit, APIs and monitoring only as each capability is confirmed in source and fully implemented. No fake pages or controls. FreeSWITCH remains the engine; preserve APIs, DB, auth, tenant isolation and live routing safety. Never copy proprietary code/branding or introduce Asterisk-only behavior.
