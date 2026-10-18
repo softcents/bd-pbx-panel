@@ -68,3 +68,19 @@ Report exact files changed, feature matrix status, tests and outcomes, untested 
 - No fake demo behavior is presented as production-ready.
 
 Start with source-access verification and the audit. Do not jump directly to generating screens.
+
+## Mandatory end-to-end workflow requirement
+
+Do not stop at an Issabel-like theme/sidebar. Recreate the familiar operational sequence across the actual FS PBX capabilities:
+
+1. Add a SIP trunk/gateway with provider details, safe credential handling, registration/health status and useful diagnostics.
+2. Add the provider's phone numbers/DIDs as separate objects where supported; clearly distinguish numbers from gateways.
+3. Create an extension, generate/configure SIP credentials using existing backend logic, optionally associate a device, and configure voicemail where supported.
+4. Connect inbound DID/number to an inbound route and a valid tenant-owned destination.
+5. Configure outbound route/pattern, route priority, selected gateway/trunk and caller-ID/permission policy.
+6. Build supported call flows such as ring groups, queues, IVR, time conditions and voicemail.
+7. Verify setup with truthful status, call-history/diagnostics and a checklist; never claim a test call succeeded without evidence.
+
+Use Issabel as a UX/workflow reference only. Keep FreeSWITCH as the call engine and preserve the current app's backend, APIs, DB, auth, roles, tenant isolation, dialplan, CDRs, recordings, jobs and integrations. Audit the real source before implementing. Use only existing working capabilities; no fake controls, dead pages or invented API fields. Separate DID/phone-number records from SIP gateway/trunk records. Show confirmation and safe previews before disruptive live changes. Easy Mode can guide users through the same sequence but must not remove any Advanced Mode functionality.
+
+Acceptance test: a tenant administrator should be able to add a gateway, add/associate a DID, create an extension, assign inbound routing, configure outbound routing and verify the setup using a discoverable Issabel-like workflow, without crossing tenant boundaries.
