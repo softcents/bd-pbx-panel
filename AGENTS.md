@@ -4,11 +4,11 @@ These instructions apply to all AI coding agents and contributors working in thi
 
 ## Mission
 
-Prepare and implement an Issabel-inspired, user-friendly UI/UX for the existing FS PBX (FreeSWITCH) platform. Preserve the existing application and all working features. Issabel is a reference for information architecture and ease of use, not a source to copy wholesale or a reason to replace FreeSWITCH with Asterisk.
+Create a custom, task-focused, easy-to-use operations experience for the existing FS PBX (FreeSWITCH) platform. Do not clone Issabel or any other PBX product. Design around the actual users, workflows, and capabilities of this codebase.
 
 ## Hard rules
 
-1. **Never delete or disable existing features to make the interface look simpler.**
+1. **Never delete or disable existing features to make the interface simpler.**
 2. **Never replace the existing PBX with a newly generated demo or mock application.**
 3. Do not change production routes, API contracts, database schema, authentication, permissions, billing logic, or FreeSWITCH behavior without an audit, justification, tests, migration/compatibility plan, and rollback instructions.
 4. Do not claim a feature is implemented merely because a button, card, or screen exists. Every action must connect to real backend behavior or be clearly marked unavailable.
@@ -16,7 +16,7 @@ Prepare and implement an Issabel-inspired, user-friendly UI/UX for the existing 
 6. Do not expose SIP passwords, API tokens, customer data, recordings, or other secrets in source control, logs, screenshots, or test fixtures.
 7. Keep strict multi-tenant data isolation. UI visibility is not a substitute for server-side authorization.
 8. Never perform destructive changes, production deployments, live telephony changes, database resets, or irreversible migrations without explicit approval.
-9. Do not commit vendor code or third-party code copied from Issabel. Respect licenses and attribution.
+9. Do not copy third-party source code, product branding, or proprietary visual assets.
 10. Never remove a menu item or capability before its underlying implementation and dependencies have been traced and documented.
 
 ## Required first step
@@ -25,41 +25,41 @@ The repository may initially contain only project specifications. Before applica
 - Confirm the actual FS PBX source location and obtain access to it.
 - Inspect the existing codebase, framework, routes, controllers, APIs, permissions, database, migrations, UI components, tests, deployment, and FreeSWITCH integration.
 - Record baseline build/test results.
-- Create a feature inventory and old-feature-to-new-menu mapping.
+- Create a feature inventory and old-feature-to-new-navigation mapping.
 - Identify incomplete features and unsupported integrations honestly.
-- Submit the audit and implementation plan before risky edits.
+- If the original source code is not available, do not pretend the audit is complete. Work only on project specifications and UX design until source access is provided.
 
-If the original source code is not available, do not pretend the audit is complete. Work only on project specifications, test plans, and scaffolding until source access is provided.
+## Custom design principles
 
-## UI principles
-
-- White, calm operational interface; subtle gray surfaces and dividers; restrained indigo accent.
-- Compact, readable tables and practical forms.
-- Clear side navigation, breadcrumbs, filters, pagination, status indicators, validation, loading, empty, error, and permission-denied states.
-- Responsive behavior for desktop, tablet, and mobile.
-- Avoid marketing dashboards, oversized decorative cards, gradients, glassmorphism, and needless animations.
-- Follow the existing source repository's design system and component conventions where available.
+- White, calm operational workspace with subtle gray surfaces and restrained accent color.
+- Task-oriented navigation that reflects what users need to do, not a copy of a legacy PBX menu.
+- Compact, readable tables; focused forms; searchable lists; helpful defaults; clear confirmation for risky actions.
+- Responsive layouts for desktop, tablet, and mobile.
+- Consistent loading, empty, success, validation, error, offline, and permission-denied states.
+- Avoid marketing dashboards, oversized decorative cards, gradients, glassmorphism, and needless animation.
+- Follow existing framework, component, accessibility, and design conventions where practical.
 - Easy Mode may simplify common workflows; Advanced Mode must preserve access to expert settings. Switching modes must never delete or reset configuration.
+- Prefer one clear place for each task, with contextual links for related tasks. Do not duplicate the same settings across confusing menus.
 
-## Navigation direction
+## Suggested workspaces
 
-Adapt the following groups to the actual audited feature set:
-- Dashboard
-- PBX: Extensions, Devices, SIP Trunks/Gateways, Inbound Routes, Outbound Routes, Time Conditions, Ring Groups, Queues, IVR, Voicemail, Recordings, CDR/Call History
-- Contact Center: Agents, Teams, Skills, Supervisor, Live Calls, Monitoring, Wallboard, QA
-- Campaigns: supported dialer modes, imports, schedules, DNC, retry policy, outcomes
-- Messaging: SMS, Voice SMS, provider configuration, delivery reports, chatbot/channel integrations when configured
-- Reports
-- Reseller & Billing
-- System: Users/Roles, Tenant Settings, Security, Provisioning, Backups, Integrations, Audit Logs, Health
+Adapt these to audited capabilities and permissions:
+- **Home:** relevant status, recent activity, actionable alerts, favorites, and quick actions.
+- **Phone System:** extensions, devices, gateways, inbound/outbound routing, IVR, ring groups, queues, voicemail, recordings, and call history.
+- **Contact Center:** agents, teams, queues, supervisor tools, live activity, wallboard, and quality assurance.
+- **Campaigns:** supported outbound dialer modes, imports, schedules, DNC, retry policy, and results.
+- **Messaging:** SMS, Voice SMS, provider configuration, delivery reports, and supported chatbot/channel integrations.
+- **Analytics:** call, queue, agent, campaign, gateway, usage, and billing reports based on available source data.
+- **Customers & Billing:** tenants, resellers, plans, tariffs, usage, wallet/ledger, invoices, and payments where implemented.
+- **Administration:** users/roles, tenant settings, security, provisioning, backups, integrations, audit logs, and health.
 
-Only show capabilities supported by the audited platform, but preserve all existing features even if they need a different menu group.
+These are UX groupings, not permission grants. Preserve every existing feature, even if the final navigation needs additional sections.
 
 ## Role and tenant rules
 
 Respect the actual authorization model and define/verify views for Super Admin, Company Admin, Reseller, Customer Admin, Supervisor, Agent, Finance/Billing, and NOC/Operations. Verify server-side policy checks for every sensitive read and write. A reseller/customer can manage only their authorized tenant scope and delegated permissions.
 
-## Contact-center safety and correctness
+## Contact-center correctness
 
 - Verify real FreeSWITCH capability before implementing listen/whisper/barge, queue interventions, or dialer features.
 - For predictive dialing, include configurable concurrency and abandonment safeguards and applicable compliance controls.
@@ -90,4 +90,4 @@ Before considering a task done:
 
 ## Current repository status
 
-This repository initially contains project documentation, not the complete FS PBX application. The original source must be connected/imported before production-code implementation can be audited or safely changed.
+This repository currently contains project documentation, not the complete FS PBX application. The original source must be connected/imported before production-code implementation can be audited or safely changed.
