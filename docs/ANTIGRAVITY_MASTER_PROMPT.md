@@ -144,3 +144,35 @@ Use a transaction ledger with unique IDs, timestamps, tenant ownership, currency
 - Audit rate changes, invoice posting, refunds, balance adjustments, expense entries, payment reconciliation and permission changes.
 - Test duplicate payment callbacks, partial payments, refunds, rounding, cross-tenant access denial, wallet top-up vs revenue accounting, invoice/ledger reconciliation, missing provider cost, time-zone/date boundaries and P&L totals against known fixtures.
 - No hardcoded/demo totals. If a report lacks data, show zero/unknown/estimated with a clear explanation rather than fabricating figures.
+
+
+## Billing modes: Prepaid, Postpaid and Hybrid (all mandatory)
+
+Implement all three billing modes as first-class, configurable options. Mode may be set at tenant/customer level and, for Hybrid, independently per charge category/service where the billing architecture supports it. Every change must be permission-controlled, effective-dated, audited and must not retroactively alter already posted transactions.
+
+### Prepaid
+- Customer/reseller funds a wallet before consuming billable services.
+- Rate actual eligible usage against the applicable tariff and debit the wallet exactly once using idempotent ledger transactions.
+- Show current balance, reserved/pending usage if supported, transaction history, low-balance thresholds and alerts.
+- Configure low-balance warning, top-up options, optional auto-top-up only with explicit customer authorization, usage caps and a defined insufficient-balance policy.
+- Do not allow negative balances unless an explicitly authorized policy permits a bounded grace balance.
+
+### Postpaid
+- Record billable usage and rate it against the effective tariff; aggregate into the selected billing cycle (monthly by default, with other cycles only if implemented).
+- Generate itemized invoices with service period, due date, tax/fees where configured, payments, credits, balance due and source usage references.
+- Support credit limit, soft warnings, grace period, overdue reminders and configurable restricted/suspended-service actions with explicit policy and audit history.
+- Distinguish usage incurred, invoiced amount, collected cash and outstanding receivable. A generated invoice must not create a second revenue entry for the same usage.
+
+### Hybrid
+- Allow a customer to have recurring fixed charges (e.g., extension subscription, DID rental, feature add-on) and independently select prepaid wallet or postpaid invoicing for eligible variable usage (e.g., call charges; SMS/Voice SMS only if those modules are integrated).
+- Define billing mode by charge category/service, with a clear summary of what is charged to wallet and what appears on the invoice.
+- Prevent double charging when usage events are rated or retried. Monthly recurring fees must follow their own billing schedule and must not be charged again on every usage event.
+- Support proration for plan changes only if explicitly implemented, with a visible and tested calculation policy.
+
+### Common billing rules and acceptance tests
+- Persist mode, effective date, tariff version, currency, rounding policy, invoice cycle, credit limit, low-balance threshold and service-action policy where applicable.
+- Use decimal-safe money arithmetic, atomic ledger writes, idempotency keys and immutable references. Posted transactions are corrected by reversals/credit notes, not silent edits.
+- Keep wallet top-ups distinct from earned service revenue and distinguish estimates from reconciled provider costs.
+- Enforce tenant and role authorization on all screens, API requests, jobs and exports.
+- Test prepaid debit/refund and insufficient balance; postpaid rating, invoice, partial payment and credit limit; hybrid recurring fees plus usage; plan/rate changes; duplicate CDR/event processing; rounding; reversals; and cross-tenant access denial.
+- UI must let an authorized admin select Prepaid, Postpaid or Hybrid, explain each mode in plain language, configure per-service rules, preview example charges and show a confirmation summary before applying changes. Never show a mode as working until the backend and tests support it.
