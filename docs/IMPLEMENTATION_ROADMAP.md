@@ -1,11 +1,11 @@
-# Custom SoftCents UX — Implementation Roadmap
+# Issabel-Inspired FS PBX — Implementation Roadmap
 
 ## Phase 0 — Source access and baseline
 
 **Gate:** Original FS PBX source is accessible.
 
 - Confirm repository, branch, framework versions, deployment target, and test commands.
-- Read project-specific instructions and existing design guide.
+- Read project instructions and existing design guide.
 - Run baseline build, lint, and tests without modifying production code.
 - Map routes, APIs, models, permissions, tenant scoping, FreeSWITCH integration, and existing UI.
 - Save a source-backed feature inventory and identify critical flows.
@@ -13,20 +13,19 @@
 
 **Deliverable:** Audit report, baseline results, feature matrix, risk register.
 
-## Phase 1 — Custom UX architecture
+## Phase 1 — Issabel-inspired UX architecture
 
-- Design a task-oriented SoftCents experience rather than copying another PBX interface.
-- Map every current feature to a clear destination.
-- Design role-specific workspaces and navigation.
-- Define Easy Mode vs Advanced Mode behavior.
-- Define white operational UI tokens and reusable components.
-- Review the UX plan before broad implementation.
+- Adapt Issabel's familiar PBX navigation and submenu patterns to FS PBX.
+- Map every current feature to a destination.
+- Define role-specific workspaces and Easy/Advanced Mode.
+- Use a clean white UI and existing components/design tokens.
+- Do not copy Issabel branding or assume Asterisk-specific behavior.
 
 **Gate:** No feature is orphaned; roles and permissions are mapped.
 
 ## Phase 2 — Shared application shell
 
-- Implement shared page shell, task-oriented navigation, global search where supported, breadcrumbs, page titles, alerts, forms, tables, pagination, filters, status indicators, and loading/empty/error states.
+- Implement the top-level menu, nested navigation, page headers, breadcrumbs, practical forms, tables, filters, pagination, status indicators, and loading/empty/error states.
 - Keep existing route names and business logic intact.
 - Make navigation responsive and keyboard accessible.
 - Use real data and existing services; do not substitute hard-coded demo metrics.
@@ -35,7 +34,7 @@
 
 ## Phase 3 — Migrate existing screens incrementally
 
-- Organize existing screens into Phone System, Contact Center, Campaigns, Messaging, Analytics, Customers & Billing, and Administration, adapting after audit.
+- Organize existing screens into PBX, Applications, Contact Center, Campaigns, Messaging, Reports, Reseller/Billing, and System, adapting after audit.
 - Migrate one coherent module at a time.
 - Preserve API contracts and validation behavior.
 - Verify each module's critical workflows before moving to the next.
@@ -66,13 +65,10 @@ Only implement features supported by actual code and telephony APIs:
 
 ## Phase 6 — Security, accessibility, and performance
 
-- Verify authorization at backend boundaries.
-- Test cross-tenant access denial.
+- Verify authorization at backend boundaries and cross-tenant access denial.
 - Check secrets handling, webhook verification, input validation, CSRF/XSS protections, and audit redaction.
 - Test keyboard navigation, focus, contrast, mobile layout, and large tables.
 - Review query performance, pagination, caching, and real-time update load.
-
-**Gate:** Security and performance issues are documented and blocking defects resolved.
 
 ## Phase 7 — Release readiness
 
@@ -84,13 +80,7 @@ Only implement features supported by actual code and telephony APIs:
 
 ## Required status reporting
 
-After each phase, report:
-1. Completed work and exact files changed.
-2. Tests run and results.
-3. What remains and why.
-4. Risks or owner decisions required.
-5. Whether any feature/API/schema/telephony behavior changed.
-6. Rollback steps for risky changes.
+After each phase, report exact files changed, tests and results, remaining work, risks/owner decisions, API/schema/telephony changes, and rollback steps.
 
 ## Current blocker
 
