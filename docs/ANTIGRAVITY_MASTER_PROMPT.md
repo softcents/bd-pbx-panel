@@ -176,3 +176,68 @@ Implement all three billing modes as first-class, configurable options. Mode may
 - Enforce tenant and role authorization on all screens, API requests, jobs and exports.
 - Test prepaid debit/refund and insufficient balance; postpaid rating, invoice, partial payment and credit limit; hybrid recurring fees plus usage; plan/rate changes; duplicate CDR/event processing; rounding; reversals; and cross-tenant access denial.
 - UI must let an authorized admin select Prepaid, Postpaid or Hybrid, explain each mode in plain language, configure per-service rules, preview example charges and show a confirmation summary before applying changes. Never show a mode as working until the backend and tests support it.
+
+
+## Enterprise Billing v2 — advanced revenue management requirements
+
+Treat billing as a modular telecom revenue-management subsystem, not a few wallet and invoice screens. Audit current source code and data models first. Integrate with existing behavior, preserve API compatibility, and label every requirement as implemented/partial/missing before building. No demo data or false feature claims.
+
+### A. Product/service catalog and commercial plans
+- Catalog of recurring and usage-based products: extensions, DID/number rental, PBX plans, feature add-ons, call usage and SMS/Voice SMS only when those modules and usage sources are integrated.
+- Plan templates, custom plans, bundles/allowances, included minutes/messages, overage rates, one-time setup fees, recurring fees, discounts, promo codes and contract/effective dates where implemented.
+- Versioned tariff tables by tenant, reseller, customer, destination/prefix, service, time band and provider route where relevant. Define rating precedence, tie-breaks and effective dates explicitly; never change historical usage pricing when a tariff is edited.
+- Price preview/simulator using sample usage and explainable line-item breakdown before publishing a rate plan.
+
+### B. Rating and mediation pipeline
+- Normalize CDR and other usage events into a canonical event format with unique source ID, tenant/customer, service, start/end, billable duration/units, route/provider, destination and source status where available.
+- Validate, deduplicate, quarantine malformed/late events, retry safely and expose an unbilled/failed-rating queue.
+- Configurable rounding and billing increments, minimum charge, connection fee, free seconds/allowances and destination classification where supported. Keep raw usage immutable and retain rating version, tariff version, calculation trace and rated line item.
+- Support rerating only through controlled adjustment/reversal workflows with before/after comparison and audit; never silently rewrite posted invoices or ledger entries.
+- Separate customer sell rate, estimated provider cost, confirmed provider invoice cost, and realized margin. Mark cost/margin as estimated until reconciliation completes.
+
+### C. Credit, risk and service policy
+- Prepaid balance, optional reservations for in-progress usage only if technically reliable, low-balance thresholds, customer-authorized auto-top-up, configurable overdraft/grace amount, and safe insufficient-funds behavior.
+- Postpaid credit limit, real-time exposure where usage events support it, warning thresholds, payment terms, aging buckets, overdue policy and authorized grace/suspension workflow.
+- Risk controls: unusual spend/minute spike alerts, repeated failed payment alerting, duplicate CDR/payment detection, per-tenant spending caps, destination/category restrictions if integrated, and manual review queues. No opaque automatic fraud accusations or unreviewed destructive action.
+- Service restriction must be explicit, reversible, tenant-aware, auditable, and safe for active calls/emergency or legally protected service paths where applicable. Show impact and require authorization before applying.
+
+### D. Invoicing, payments and collections
+- Invoice lifecycle: draft → reviewed/posted → partially paid/paid/overdue/voided via approved reversal; itemized usage and recurring charges, service period, due date, taxes/fees only under configured rules, credit notes, receipts and statements.
+- Support partial payments, overpayments/credits, refunds, disputes, write-offs only with authorized policy, payment allocation and reconciliation, and downloadable customer statements.
+- Payment integrations must verify provider signatures/server-side status, use idempotency, store provider references, reconcile asynchronous callbacks, and never trust browser redirects as proof of payment.
+- Support payment collection reports, aging and reminder rules; prevent repeated reminder storms and log delivery/result where supported.
+
+### E. Reseller and multi-tenant commercial hierarchy
+- Platform → reseller → customer hierarchy with tenant-scoped visibility and explicit financial ownership.
+- Separate customer sell tariff from reseller buy/transfer price; support margin/commission/discount policies and effective dates. Do not assume reseller collections automatically become platform revenue.
+- Track reseller wallet/credit, transfers, customer collections if represented in this system, commissions, receivables/payables and settlement statements. Define who is merchant of record and who owes each balance.
+- Tenant-specific invoice branding and numbering only where supported, with no cross-tenant data leakage. Enforce RBAC on API, jobs, exports and reports, not only UI.
+
+### F. General ledger, costs and accounting integrity
+- Double-entry or equivalent balanced accounting ledger with chart of accounts and mapping rules for service revenue, deferred/unearned revenue where relevant, wallet/customer liabilities, receivables, provider cost payable, cash/payment clearing, tax payable and operating expenses.
+- Immutable posted journal entries; corrections via reversal/credit/debit adjustment with actor, reason, timestamp and reference. Period close/lock, reopening only with privileged approval and audit.
+- Distinguish cash collected, invoice revenue, recognized service revenue, wallet funding/liability, provider usage accrual, confirmed provider bill and operating expense. Avoid double counting top-ups, invoices, payment receipts and usage.
+- Multi-currency only if exchange rates, base currency, conversion timestamp, rounding and realized FX gain/loss are fully modeled; otherwise explicitly enforce a single configured currency.
+- Tax reports only when tax jurisdiction/rules are configured; never invent tax rates or claim tax compliance without validation.
+
+### G. Provider cost reconciliation and margin
+- Import or enter provider bills with invoice reference, period, service, amount and currency; match to rated usage/CDRs where data is available.
+- Report expected cost vs billed cost, unmatched usage, unmatched bill lines, duplicate charges, rate variance and margin by provider/route/destination/customer/reseller/service.
+- Track carrier deposits, number rental and recurring provider commitments as separate costs when configured.
+
+### H. Finance dashboards and reports
+- P&L by period, tenant, reseller, customer, service and provider: recognized revenue, direct cost, gross profit, operating expenses, net profit/loss and margin.
+- Cash flow/collections, accounts receivable aging, accounts payable, invoice register, wallet liabilities, ledger/journal, payment reconciliation, expense register, tax summaries (configured only), reseller settlement and usage/rating exceptions.
+- Drill down every aggregate to source invoices, payments, usage records, provider bills and journal entries. Exports must honor same filters and authorization as the screen. Display timezone, currency, filters, generated-at time and provisional/final status.
+- Forecasting is explicitly a forecast based on stated assumptions, separate from actuals. Never mix estimated future values into historical actual P&L.
+
+### I. Operational controls and audit
+- Fine-grained permissions for rate editing, invoice posting, refunding, wallet adjustment, expense approval, period close and report export; optional dual approval for high-value refunds/adjustments.
+- Audit rate changes, billing-mode changes, manual charges, usage rerating, payment reconciliation, journal postings, refunds, expense edits and service restrictions.
+- Background jobs must be idempotent, observable, retryable and alert on stuck rating, invoice runs or reconciliation. Provide dry-run/preview for bulk billing and a resumable run report.
+- Data retention, backup/restore and export strategy for financial ledgers and invoice artifacts.
+
+### J. Required automated tests and rollout
+- Golden fixtures for rating and P&L; invoice-to-ledger and payment-to-ledger reconciliation; prepaid debit exactly once; postpaid invoice exactly once; hybrid recurring fee plus usage without duplicate charge.
+- Duplicate/late CDRs, malformed records, rerating, partial payment, refund/reversal, wallet top-up treatment, rate versioning, timezone/day-boundary, rounding, credit limit, provider invoice variance and cross-tenant authorization tests.
+- Load tests for monthly rating/invoice runs, migration/backfill dry run, reconciliation report, feature flags and rollback plan. Never mutate live billing or routing in production without explicit reviewed migration and backup.
