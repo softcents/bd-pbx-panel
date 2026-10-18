@@ -213,3 +213,19 @@ The Billing UI must expose three supported modes and explain them in plain langu
 - **Hybrid:** recurring fixed fees (extension subscription, DID rental or enabled add-ons) follow their billing schedule, while eligible variable usage can be charged to wallet or postpaid invoice independently. Clearly show the charge destination for each service.
 
 For each customer/tenant, expose the mode, effective date, applicable tariff, currency, billing cycle, credit limit, low-balance threshold and any authorized service restriction policy. Show a preview before saving, and audit changes. Prevent duplicate charges and double-counting between wallet movements, invoices and revenue. Test all three modes with retries, refunds, partial payments, rate changes and tenant-isolation checks. Do not claim unsupported behavior is implemented.
+
+
+## 14. Enterprise Billing v2 modules
+
+Extend the billing workspace beyond basic wallets and invoices into a complete, auditable telecom revenue-management area:
+- **Catalog & Plans:** recurring/usage products, bundles/allowances, setup fees, discounts and versioned effective-dated tariffs.
+- **Usage Rating:** CDR/event mediation, deduplication, late/malformed event handling, explainable calculations, tariff version tracking and unbilled-usage queue.
+- **Credit & Risk:** wallet thresholds, authorized auto-top-up, credit limits, exposure alerts, spending caps, review queues and reversible service policies.
+- **Invoices & Collections:** invoice lifecycle, partial payments, credits/refunds, payment allocation, overdue aging, statements and reminders.
+- **Reseller Settlement:** buy/sell rates, margin/commission, transfers, receivable/payable and settlement statements across a platform→reseller→customer hierarchy.
+- **Accounting:** balanced ledger, chart-of-account mapping, immutable posted entries, reversal/adjustment workflow, period close and reconciliation.
+- **Provider Reconciliation:** compare rated usage with provider bills, track unmatched items and cost variance, and report actual vs estimated margin.
+- **Reports:** P&L, collections/cash movement, receivables aging, payables, wallet liabilities, journal, expenses, reseller settlement, rating exceptions and forecast (separated from actuals).
+- **Operations:** permission-controlled approvals, idempotent background jobs, dry-run invoice runs, retry/error reports, audit trails and safe rollout/rollback.
+
+The UI must explain each financial state, show actual/estimated/provisional/final labels, and drill down every total to source transactions. Preserve tenant boundaries in screens, APIs, exports and background jobs. Do not silently change posted charges or historical tariffs; use versioned rates and audited reversals. Implement only after a source audit and add automated reconciliation, duplicate-event, refund, rounding, hybrid-charge and cross-tenant tests.
